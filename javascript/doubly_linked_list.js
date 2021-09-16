@@ -1,6 +1,7 @@
 class DoublyLinkedList {
-  constructor(head = null) {
+  constructor(head = null, tail = null) {
     this.head = head;
+    this.tail = tail
   }
 
   iterate(callback) {
@@ -45,8 +46,15 @@ class DoublyLinkedList {
 
   // add the node to the start of the list, no nodes should be removed
   addFirst(node) {
-    node.next = this.head;
-    this.head = node;
+    if(this.head === null){
+      this.head = node
+      this.tail = node
+    } else {
+      this.head.prev = node
+      node.next = this.head
+      this.head = node
+    }
+    return this
   }
 
   // add node to end of list, no nodes should be removed
@@ -54,15 +62,13 @@ class DoublyLinkedList {
   addLast(node) {
     if (this.head === null) {
       this.head = node;
-      return;
+      this.tail = node
+    } else {
+      this.tail.next = node
+      node.prev = this.tail
+      this.tail = node
     }
-
-    this.iterate(currNode => {
-      if (currNode.next === null) {
-        currNode.next = node;
-        return true;
-      }
-    });
+    return this
   }
 
   // remove the first Node in the list and update head
@@ -162,9 +168,10 @@ class DoublyLinkedList {
 }
 
 class Node {
-  constructor(value = null, next = null) {
+  constructor(value = null, next = null, prev = null) {
     this.value = value;
     this.next = next;
+    this.prev = prev;
   }
 }
 
